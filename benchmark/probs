@@ -1,0 +1,17 @@
+Compute the length of a list:
+my-len :: List<Any> -> Number
+Compute the sum of a list (of numbers):
+my-sum :: List<Number> -> Number
+Compute the maximum of a list (of numbers or strings):
+my-max :: List<Any> -> Any
+Given a list of strings, convert each string to a number representing its length:
+my-str-len :: List<String> -> List<Number>
+Given a list of numbers, generate a list of its positive numbers:
+If you want to be pedantic: its positive numbers with the same count and in the same order.
+my-pos-nums :: List<Number> -> List<Number>
+Given a list of numbers, replace every element with the running sum, i.e., the sum of all the elements from the beginning of the list until that element (inclusive):
+my-running-sum :: List<Number> -> List<Number>
+Given a list, keep every alternate element in it, starting from the first:
+my-alternating :: List<Any> -> List<Any>
+Given a list of numbers, compute the average of the numbers:
+my-avg :: List<Number> -> List<Number>
