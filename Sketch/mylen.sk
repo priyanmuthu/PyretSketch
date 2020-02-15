@@ -1,0 +1,17 @@
+include "./sketchlib/list.skh";
+
+int mylen(List<int> a) {
+	List<int> empty_list = empty();
+	if(a == empty_list) {
+		return ??;
+	}else {
+		return ?? + mylen(((Cons<int>)a).next);
+	}
+}
+
+harness void main() {
+	List<int> a = empty();
+	List<int> b = add(add(add(a,3), 4), 5);
+	assert mylen(a) == 0;
+	assert mylen(b) == 3;
+}
