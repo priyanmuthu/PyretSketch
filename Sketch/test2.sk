@@ -1,0 +1,46 @@
+include "./sketchlib/list.skh";
+
+// List<int> empty_list;
+
+List<int> empty_list(){
+	return empty();
+}
+
+generator int intgen(List<int> a){
+	if(??){
+        return ??;
+    }
+    return mylen(((Cons<int>)a).next);
+}
+
+
+
+// generator List<int> listgen(List<int> l){
+//     if(l == empty_list()){
+//     return {| l |};
+//     }
+//     return {| ((Cons<int>)l).next | l | empty() |};
+// }
+
+int mylen(List<int> a) {
+	// List<int> empty_list = empty();
+	if(a == empty_list()) {
+		return intgen(a);
+	}else {
+		// return intgen(a);
+        // return ?? + mylen(((Cons<int>)a).next);
+        return intgen(a) + intgen(a);
+	}
+}
+
+harness void main() {
+	// empty_list = empty();
+	List<int> a = empty();
+	List<int> b = add(add(add(a,3), 4), 5);
+	List<int> c = add(add(add(add(a,3), 4), 5), 6);
+	List<int> d = add(add(add(add(add(add(a,3), 4), 5), 6), 7), 8);
+	assert mylen(a) == 0;
+	assert mylen(b) == 3;
+	assert mylen(c) == 4;
+	// assert mylen(d) == 6;
+}
