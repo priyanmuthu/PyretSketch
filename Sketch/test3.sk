@@ -1,0 +1,70 @@
+include "./sketchlib/list.skh";
+
+// List<int> empty_list;
+
+int max_count = 0;
+
+List<int> empty_list(){
+	return empty();
+}
+
+int max(int a, int b){
+    return a > b ? a : b; 
+}
+
+generator int maxgen(List<int> a, int bnd){
+	max_count++;
+	assume max_count < 1;
+	return max(intgen(a, bnd), intgen(a, bnd));
+}
+
+// Replacement ??
+generator int constgen(){
+	return {|0|1|2|3|4|};
+}
+
+generator int intgen(List<int> a, int bnd){
+    if (bnd == 0){return constgen();}
+	if(??){
+        return {|constgen()| constgen() + intgen(a, bnd-1)|maxgen(a, bnd-1)|};
+    }
+	// assert a != empty();
+    if(??){
+        return ((Cons<int>)a).val;
+    }
+    return mylen(listgen(a)) + intgen(a, bnd-1);
+}
+
+
+
+generator List<int> listgen(List<int> a){
+    if(??){
+        return empty();
+    }
+    return ((Cons<int>)a).next;
+}
+
+int mylen(List<int> a) {
+	// List<int> empty_list = empty();
+	if(a == empty_list()) {
+		return intgen(a,2);
+	}else {
+		// return intgen(a);
+        // return ?? + mylen(((Cons<int>)a).next);
+        return intgen(a,2);
+	}
+}
+
+harness void main() {
+	// empty_list = empty();
+	List<int> a = empty();
+	List<int> b = add(add(add(a,3), 4), 5);
+	List<int> c = add(add(add(add(a,16), 14), 5), 1);
+	List<int> d = add(add(add(add(a,18), 14), 15), 10);
+	// List<int> d = add(add(add(add(add(add(a,3), 4), 5), 6), 7), 8);
+	assert mylen(a) == 0;
+	assert mylen(b) == 5;
+	assert mylen(c) == 16;
+	assert mylen(d) == 18;
+	// assert mylen(d) == 6;
+}

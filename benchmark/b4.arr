@@ -1,5 +1,5 @@
 #|
-    Problem 4: my-str-len: Given a list of numbers, generate a list of its positive numbers.
+    Problem 4: my-str-len: Given a list of strings, convert each string to a number representing its length.
 |#
 
 fun my-str-len(l):
