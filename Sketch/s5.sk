@@ -1,0 +1,107 @@
+include "./sketchlib/list.skh";
+
+List<int> empty_list(){
+	return empty();
+}
+
+int max(int a, int b){
+    return a > b ? a : b; 
+}
+
+// Replacement ??
+generator int constgen(){
+	return {|0|1|2|3|};
+}
+
+generator int variableIntgen(List<int> a){
+	return head(a);
+}
+
+// generator bit condgen(List<int> a){
+//     return {|
+//         constgen() > variableIntgen(a)|
+//         constgen() < variableIntgen(a)|
+//         constgen() == variableIntgen(a)|
+//         (! condgen(a))|};
+// }
+
+generator bit condgen(List<int> a){
+    return {|
+        variableIntgen(a) > constgen()|
+        variableIntgen(a) < constgen()|};
+}
+
+generator List<int> simplelistgen(List<int> a){
+    if(??){
+        return empty_list();
+    }
+    return ((Cons<int>)a).next;
+}
+
+generator List<int> listgen(List<int> a, int bnd){
+    if(bnd == 0){ return empty_list(); }
+    if(??){
+        return empty_list();
+    }
+    if(??){
+        return ((Cons<int>)a).next;
+    }
+    if(??){
+        return mypos(simplelistgen(a));
+    }
+    return add(listgen(a, bnd - 1),variableIntgen(a));
+}
+
+List<int> ifelist(List<int> a){
+    if(condgen(a)){
+        return listgen(a, 2);
+    }
+    else{
+        return listgen(a, 3);
+    }
+}
+
+generator List<int> ifelistgen(List<int> a){
+    return {|listgen(a, 2)|ifelist(a)|};
+}
+
+List<int> mypos(List<int> a) {
+	if(a == empty_list()) {
+		return listgen(a, 2);
+	}else {
+        return ifelist(a);
+	}
+}
+
+List<int> testpos(List<int> a){
+    if(a == empty_list()){
+        return empty();
+    }
+    else{
+        if( head(a) > 0){
+            return add(testpos(((Cons<int>)a).next), head(a));
+        }
+        else{
+            return testpos(((Cons<int>)a).next);
+        }
+    }
+}
+
+harness void main() {
+	List<int> a = empty();
+	List<int> res_a = empty();
+	List<int> b = add(add(add(a,3), -4), 5);
+	List<int> res_b = add(add(a,3), 5);
+	List<int> c = add(add(add(add(a,16), 14), -5), 1);
+	List<int> res_c = add(add(add(a,16), 14), 1);
+	List<int> d = add(add(add(add(a,-18), 14), 15), -10);
+	List<int> res_d = add(add(a, 14), 15);
+	assert mypos(a) == res_a;
+	assert mypos(b) == res_b;
+	assert mypos(c) == res_c;
+	assert mypos(d) == res_d;
+    // assert testpos(a) == res_a;
+	// assert testpos(b) == res_b;
+	// assert testpos(c) == res_c;
+	// assert testpos(d) == res_d;
+}

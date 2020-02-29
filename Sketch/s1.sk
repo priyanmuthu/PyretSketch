@@ -17,7 +17,7 @@ generator int variableIntgen(List<int> a){
 	if(??){
         return ((Cons<int>)a).val;
     }
-    return mymax(listgen(a));
+    return mylen(listgen(a));
 }
 
 generator int intgen(List<int> a, int bnd){
@@ -40,7 +40,7 @@ generator List<int> listgen(List<int> a){
     return ((Cons<int>)a).next;
 }
 
-int mymax(List<int> a) {
+int mylen(List<int> a) {
 	if(a == empty_list()) {
 		return intgen(a,2);
 	}else {
@@ -53,8 +53,8 @@ harness void main() {
 	List<int> b = add(add(add(a,3), 4), 5);
 	List<int> c = add(add(add(add(a,16), 14), 5), 1);
 	List<int> d = add(add(add(add(a,18), 14), 15), 10);
-	assert mymax(a) == 0;
-	assert mymax(b) == 5;
-	assert mymax(c) == 16;
-	assert mymax(d) == 18;
+	assert mylen(a) == 0;
+	assert mylen(b) == 3;
+	assert mylen(c) == 4;
+	assert mylen(d) == 4;
 }
