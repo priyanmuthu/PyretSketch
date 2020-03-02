@@ -10,8 +10,12 @@ int mylen(List<int> a) {
 }
 
 harness void main() {
-	List<int> a = empty();
-	List<int> b = add(add(add(a,3), 4), 5);
-	assert mylen(a) == 0;
-	assert mylen(b) == 3;
+List<int> __l0 = add ( add ( add ( empty ( ) , 7 ) , 8 ) , 9 ) ;
+List<int> __l1 = add ( add ( empty ( ) , 8 ) , 9 ) ;
+List<int> __l2 = add ( empty ( ) , 9 ) ;
+List<int> __l3 = empty ( ) ;
+assert ( mylen ( __l0 ) ) == ( 1 + 2 ) ;
+assert ( mylen ( __l1 ) ) == ( 1 + 1 ) ;
+assert ( mylen ( __l2 ) ) == ( 1 + 0 ) ;
+assert ( mylen ( __l3 ) ) == ( 0 ) ;
 }
