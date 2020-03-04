@@ -10,7 +10,7 @@ int max(int a, int b){
 
 // Replacement ??
 generator int constgen(){
-	return {|0|1|2|3|};
+	return ??;
 }
 
 generator int variableIntgen(List<int> a){
@@ -85,8 +85,8 @@ harness void main() {
 	List<int> res_b = add(add(a,3), 5);
 	List<int> c = add(add(add(add(a,16), 14), -5), 1);
 	List<int> res_c = add(add(add(a,16), 14), 1);
-	List<int> d = add(add(add(add(a,-18), 14), 15), -10);
-	List<int> res_d = add(add(a, 14), 15);
+	List<int> d = add(add(add(add(a,-18), 14), 0), -10);
+	List<int> res_d = add(add(a, 14), 0);
 	assert mypos(a) == res_a;
 	assert mypos(b) == res_b;
 	assert mypos(c) == res_c;

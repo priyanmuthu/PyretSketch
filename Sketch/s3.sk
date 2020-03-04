@@ -31,8 +31,6 @@ generator int intgen(List<int> a, int bnd){
     }
 }
 
-
-
 generator List<int> listgen(List<int> a){
     if(??){
         return empty();
