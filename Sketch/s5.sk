@@ -52,7 +52,7 @@ generator List<int> listgen(List<int> a, int bnd){
     return add(listgen(a, bnd - 1),variableIntgen(a));
 }
 
-List<int> ifelist(List<int> a){
+generator List<int> ifelist(List<int> a){
     if(condgen(a)){
         return listgen(a, 2);
     }
@@ -67,9 +67,9 @@ generator List<int> ifelistgen(List<int> a){
 
 List<int> mypos(List<int> a) {
 	if(a == empty_list()) {
-		return listgen(a, 2);
+		return ifelistgen(a);
 	}else {
-        return ifelist(a);
+        return ifelistgen(a);
 	}
 }
 
