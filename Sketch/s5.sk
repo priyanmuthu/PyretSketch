@@ -5,7 +5,7 @@ List<int> empty_list(){
 }
 
 int max(int a, int b){
-    return a > b ? a : b; 
+    return a > b ? a : b;
 }
 
 // Replacement ??
@@ -17,18 +17,9 @@ generator int variableIntgen(List<int> a){
 	return head(a);
 }
 
-// generator bit condgen(List<int> a){
-//     return {|
-//         constgen() > variableIntgen(a)|
-//         constgen() < variableIntgen(a)|
-//         constgen() == variableIntgen(a)|
-//         (! condgen(a))|};
-// }
-
 generator bit condgen(List<int> a){
     return {|
-        variableIntgen(a) > constgen()|
-        variableIntgen(a) < constgen()|};
+        variableIntgen(a) ( > | < | == ) constgen()|};
 }
 
 generator List<int> simplelistgen(List<int> a){
@@ -49,7 +40,7 @@ generator List<int> listgen(List<int> a, int bnd){
     if(??){
         return mypos(simplelistgen(a));
     }
-    return add(listgen(a, bnd - 1),variableIntgen(a));
+    return add(listgen(a, bnd - 1), variableIntgen(a));
 }
 
 generator List<int> ifelist(List<int> a){
@@ -61,15 +52,15 @@ generator List<int> ifelist(List<int> a){
     }
 }
 
-generator List<int> ifelistgen(List<int> a){
+generator List<int> complexlistgen(List<int> a){
     return {|listgen(a, 2)|ifelist(a)|};
 }
 
 List<int> mypos(List<int> a) {
 	if(a == empty_list()) {
-		return ifelistgen(a);
+		return complexlistgen(a);
 	}else {
-        return ifelistgen(a);
+        return complexlistgen(a);
 	}
 }
 
