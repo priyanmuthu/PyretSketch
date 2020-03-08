@@ -1,0 +1,22 @@
+[list: 
+    s-letrec-bind(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 1, 0, 0, 3, 3, 43), s-bind(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 1, 0, 0, 3, 3, 43), false, s-atom("printhelloworld", 69), a-blank), s-lam(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 1, 0, 0, 3, 3, 43), "printhelloworld", [list: ], [list: ], a-blank, "", s-app-enriched(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 2, 2, 25, 2, 16, 39), s-id(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 2, 2, 25, 2, 7, 30), s-global("print")), [list: s-str(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 2, 8, 31, 2, 15, 38), "hello")], app-info-c(false, true)), none, none, false)), 
+    
+    s-letrec-bind(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 5, 0, 45, 10, 3, 127), s-bind(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 5, 0, 45, 10, 3, 127), false, s-atom("increment", 70), a-blank), 
+    
+    s-lam(
+        srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 5, 0, 45, 10, 3, 127), "increment", [list: ], [list: s-bind(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 5, 14, 59, 5, 15, 60), false, s-atom("a", 71), a-blank)], a-blank, "", s-app-enriched(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 6, 2, 65, 6, 7, 70), s-id(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 6, 2, 65, 6, 7, 70), s-global("_plus")), [list: s-id(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 6, 2, 65, 6, 3, 66), s-atom("a", 71)), s-num(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 6, 6, 69, 6, 7, 70), 1)], app-info-c(false, true)), some(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 7, 0, 71, 7, 6, 77)), 
+    
+        some(
+            s-block(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 8, 2, 80, 8, 21, 99), [list: 
+                s-check-test(
+                    srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 8, 2, 80, 8, 21, 99), s-op-is(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 8, 16, 94, 8, 18, 96)), none, s-app-enriched(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 8, 2, 80, 8, 15, 93), s-id-letrec(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 8, 2, 80, 8, 11, 89), s-atom("increment", 70), true), [list: s-num(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 8, 12, 90, 8, 14, 92), 55)], app-info-c(false, false)), some(s-num(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 8, 19, 97, 8, 21, 99), 56)), none), 
+            
+                s-check-test(
+                    srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 9, 2, 102, 9, 23, 123), s-op-is(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 9, 17, 117, 9, 19, 119)), none, s-app-enriched(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 9, 2, 102, 9, 16, 116), s-id-letrec(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 9, 2, 102, 9, 11, 111), s-atom("increment", 70), true), [list: s-num(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 9, 12, 112, 9, 15, 115), 242)], app-info-c(false, false)), some(s-num(srcloc("file:///Users/maniknarang/Downloads/pyret-lang/test.arr", 9, 20, 120, 9, 23, 123), 243)), none)
+            ])), 
+        false)
+    )
+]
+  
+  
+  

@@ -5,3 +5,8 @@
 .pyret/
 *.jarr
 
+# VS Code
+.vscode/
+
+# venv
+venv
