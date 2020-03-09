@@ -1,5 +1,5 @@
 #|
-    Problem 5: my-alternating: Given a list of numbers, generate a list of alternating numbers
+    Problem 6: my-alternating: Given a list of numbers, generate a list of alternating numbers
 |#
 
 fun my-alternating(l):
