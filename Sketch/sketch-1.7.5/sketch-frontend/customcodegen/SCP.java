@@ -48,6 +48,7 @@ public class SCP extends FEReplacer
 	protected String emptyListCheck;
 	protected HashMap<String, String> variableMap;
 	protected HashSet<String> outSet;
+	protected String inputParamName;
 
 	// Constants by Priyan
 	protected static final String IS_EMPTY_LIST_FUNC = "isEmptyList";
@@ -115,9 +116,11 @@ public class SCP extends FEReplacer
 			currentOut = params.get(params.size() - 1).getName();
 		}
 
+		inputParamName = params.get(0).getName();
+
 		if(outtags && func.getTag() != null){ out.println("T="+func.getTag()); }
 		printTab();
-		out.println("/*" + func.getCx() + "*/");
+//		out.println("/*" + func.getCx() + "*/");
 		printTab();
 		//From the custom code generator you have access to any annotations attached to the function.
 		//You can use these annotations to pass information to your code generator.
@@ -128,8 +131,15 @@ public class SCP extends FEReplacer
 		}
 		out.print("\n");
 		// Priyan: prints the function header
-		out.println((func.getInfo().printType == PrintFcnType.Printfcn ? "printfcn " : "") + func.toString());
-		super.visitFunction(func);
+		out.println("fun " + func.getName() + "(" + inputParamName + "):");
+//		out.println((func.getInfo().printType == PrintFcnType.Printfcn ? "printfcn " : "") + func.toString());
+		try {
+			super.visitFunction(func);
+		}
+		catch (Exception e){
+			printLine(e.getStackTrace()[0].toString());
+		}
+		out.println("end");
 		out.flush();
 		return func;
 	}
@@ -141,7 +151,7 @@ public class SCP extends FEReplacer
 
 		//The name resolver is used to find functions and structs matching a particular name.
 		nres.setPackage(spec);
-		printLine("/* BEGIN PACKAGE " + spec.getName() + "*/");
+//		printLine("/* BEGIN PACKAGE " + spec.getName() + "*/");
 
 		for (StructDef tsOrig : spec.getStructs()) {
 			StructDef ts = (StructDef) tsOrig.accept(this);
@@ -171,7 +181,7 @@ public class SCP extends FEReplacer
 				Function newFunc = (Function) oldFunc.accept(this);
 			}
 		}
-		printLine("/* END PACKAGE " + spec.getName() + "*/");
+//		printLine("/* END PACKAGE " + spec.getName() + "*/");
 		return spec;
 	}
 
@@ -218,7 +228,7 @@ public class SCP extends FEReplacer
 			if(stmt.getCond() instanceof ExprVar){
 				// Most probably check for empty list
 				// Todo: Check if the condition is for empty list
-				printLine("cases (list) a:");
+				printLine("cases (list) " + inputParamName + ":");
 				indent++;
 				printLine("| empty =>");
 				printIndentedStatement(stmt.getCons());
@@ -408,14 +418,36 @@ public class SCP extends FEReplacer
 	public Object visitStmtAssign(StmtAssign stmt)
 	{
 		// Out variable assignment
-		ExprVar lhs, rhs;
-		lhs = (ExprVar)stmt.getLHS();
-		rhs = (ExprVar)stmt.getRHS();
+		String lhs, rhs;
 
-		if(! outSet.contains(rhs.toString())){
+		lhs = stmt.getLHS().toString();
+		if(stmt.getRHS() instanceof ExprBinary){
+			ExprBinary rhsExpr = (ExprBinary)stmt.getRHS();
+			String rightStr = rhsExpr.getRight().toString();
+			String leftStr = rhsExpr.getLeft().toString();
+			if(rhsExpr.getRight() instanceof ExprVar && variableMap.containsKey(rightStr)){
+				rightStr = variableMap.get(rightStr);
+			}
+			if(rhsExpr.getLeft() instanceof ExprVar && variableMap.containsKey(leftStr)){
+				leftStr = variableMap.get(leftStr);
+			}
+
+			rhs = ExprBinaryString(rhsExpr, leftStr, rightStr);
+		}
+		else {
+			rhs = stmt.getRHS().toString();
+		}
+
+		if(! outSet.contains(rhs)){
 			// Print stuff
 			outSet.add(lhs.toString());
-			printLine(variableMap.get(rhs.toString()));
+			printLine(variableMap.getOrDefault(rhs, rhs));
+//			if(variableMap.containsKey(rhs)) {
+//				printLine(variableMap.get(rhs));
+//			}
+//			else{
+//				printLine(rhs);
+//			}
 		}
 
 		if(outtags && stmt.getTag() != null){ out.println("T="+stmt.getTag()); }
@@ -426,6 +458,22 @@ public class SCP extends FEReplacer
 		return super.visitStmtAssign(stmt);
 	}
 
+	public String ExprBinaryString(ExprBinary expr, String leftStr, String rightStr)
+	{
+		String theOp = expr.getOpString();
+		String lstr, rstr;
+		if(expr.getLeft() instanceof ExprConstInt || expr.getLeft() instanceof ExprVar){
+			lstr = leftStr;
+		}else{
+			lstr = "(" + leftStr + ")";
+		}
+		if(expr.getRight() instanceof ExprConstInt || expr.getRight() instanceof ExprVar){
+			rstr = rightStr;
+		}else{
+			rstr = "(" + rightStr + ")";
+		}
+		return lstr + " " + theOp + " " + rstr;
+	}
 
 	@Override
 	public Object visitStmtBreak(StmtBreak stmt)
@@ -586,17 +634,18 @@ public class SCP extends FEReplacer
 
 	@Override
 	public Object visitStructDef(StructDef ts) {
-		printLine("struct " + ts.getName() + " {");
-		for (StructFieldEnt ent : ts.getFieldEntriesInOrder()) {
-			printLine("    " + ent.getType().toString() + " " + ent.getName() + ";");
-		}
-		for (Entry<String, Vector<Annotation>> at : ts.annotationSet()) {
-			for (Annotation ann : at.getValue()) {
-				printLine("    " + ann);
-			}
-		}
-		printLine("}");
-		return ts;
+		return  ts;
+//		printLine("struct " + ts.getName() + " {");
+//		for (StructFieldEnt ent : ts.getFieldEntriesInOrder()) {
+//			printLine("    " + ent.getType().toString() + " " + ent.getName() + ";");
+//		}
+//		for (Entry<String, Vector<Annotation>> at : ts.annotationSet()) {
+//			for (Annotation ann : at.getValue()) {
+//				printLine("    " + ann);
+//			}
+//		}
+//		printLine("}");
+//		return ts;
 	}
 
 	@Override
