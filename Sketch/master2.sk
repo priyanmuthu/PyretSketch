@@ -8,6 +8,14 @@ int max(int a, int b){
     return a > b ? a : b;
 }
 
+boolean isEmptyList(List<int> a){
+	return a == empty_list();
+}
+
+List<int> tail(List<int> a){
+	return ((Cons<int>)a).next;
+}
+
 // Replacement ??
 generator int constgen(){
 	return {|0|1|2|3|};
@@ -54,7 +62,7 @@ generator List<int> simplelistgen(List<int> a){
     if(??){
         return empty_list();
     }
-    return ((Cons<int>)a).next;
+    return tail(a);
 }
 
 generator List<int> listgen(List<int> a, int bnd){
@@ -79,7 +87,7 @@ generator List<int> complexlistgen(List<int> a){
 }
 
 List<int> list_method(List<int> a) {
-	if(a == empty_list()) {
+	if(isEmptyList(a)) {
 		return complexlistgen(a);
 	}else {
         return complexlistgen(a);
@@ -87,7 +95,7 @@ List<int> list_method(List<int> a) {
 }
 
 int int_method(List<int> a) {
-	if(a == empty_list()) {
+	if(isEmptyList(a)) {
 		return complexintgen(a);
 	}else {
         return complexintgen(a);
@@ -98,18 +106,18 @@ harness void main() {
 
 	// List of positive numbers
 
-	// List<int> a = empty();
-	// List<int> res_a = empty();
-	// List<int> b = add(add(add(a,3), -4), 5);
-	// List<int> res_b = add(add(a,3), 5);
-	// List<int> c = add(add(add(add(a,16), 14), -5), 1);
-	// List<int> res_c = add(add(add(a,16), 14), 1);
-	// List<int> d = add(add(add(add(a,-18), 14), 0), -10);
-	// List<int> res_d = add(add(a, 14), 0);
-	// assert list_method(a) == res_a;
-	// assert list_method(b) == res_b;
-	// assert list_method(c) == res_c;
-	// assert list_method(d) == res_d;
+	List<int> a = empty();
+	List<int> res_a = empty();
+	List<int> b = add(add(add(a,3), -4), 5);
+	List<int> res_b = add(add(a,3), 5);
+	List<int> c = add(add(add(add(a,16), 14), -5), 1);
+	List<int> res_c = add(add(add(a,16), 14), 1);
+	List<int> d = add(add(add(add(a,-18), 14), 0), -10);
+	List<int> res_d = add(add(a, 14), 0);
+	assert list_method(a) == res_a;
+	assert list_method(b) == res_b;
+	assert list_method(c) == res_c;
+	assert list_method(d) == res_d;
 
 	// Length of the list
 
@@ -146,16 +154,16 @@ harness void main() {
 
 	// Sum of positive numbers
 
-	List<int> a = empty();
-	int res_a = 0;
-	List<int> b = add(add(add(a,3), -4), 5);
-	int res_b = 8;
-	List<int> c = add(add(add(add(a,16), 14), -5), 1);
-	int res_c = 31;
-	List<int> d = add(add(add(add(a,-18), 14), 0), -10);
-	int res_d = 14;
-	assert int_method(a) == res_a;
-	assert int_method(b) == res_b;
-	assert int_method(c) == res_c;
-	assert int_method(d) == res_d;
+	// List<int> a = empty();
+	// int res_a = 0;
+	// List<int> b = add(add(add(a,3), -4), 5);
+	// int res_b = 8;
+	// List<int> c = add(add(add(add(a,16), 14), -5), 1);
+	// int res_c = 31;
+	// List<int> d = add(add(add(add(a,-18), 14), 0), -10);
+	// int res_d = 14;
+	// assert int_method(a) == res_a;
+	// assert int_method(b) == res_b;
+	// assert int_method(c) == res_c;
+	// assert int_method(d) == res_d;
 }

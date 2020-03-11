@@ -8,6 +8,10 @@ int max(int a, int b){
     return a > b ? a : b;
 }
 
+boolean isEmptyList(List<int> a){
+	return a == empty_list();
+}
+
 // Replacement ??
 generator int constgen(){
 	return {|0|1|2|3|};
@@ -75,7 +79,7 @@ generator List<int> complexlistgen(List<int> a){
 }
 
 List<int> list_method(List<int> a) {
-	if(a == empty_list()) {
+	if(isEmptyList(a)) {
 		return complexlistgen(a);
 	}else {
         return complexlistgen(a);

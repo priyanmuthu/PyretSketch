@@ -131,3 +131,12 @@ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 Sketch Temp notes
 
 /Users/priyan/UCSD/PyretSketch/Sketch/sketch-1.7.5/sketch-frontend/src/main/java/sketch/compiler/ast/core/stmts
+
+Run statements for custom code gen
+
+javac -cp sketch-1.7.6-noarch.jar customcodegen/SCP.java
+
+jar -cvf customcodegen.jar customcodegen/
+
+
+sketch --fe-custom-codegen customcodegen.jar test/sk/seq/miniTest1.sk
