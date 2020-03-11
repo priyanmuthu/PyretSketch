@@ -1,6 +1,7 @@
 package customcodegen;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -53,7 +54,8 @@ public class SCP extends FEReplacer
 	protected static final String HEAD_LIST_FUNC = "head@list";
 	protected static final String TAIL_LIST_FUNC = "tail";
 	protected static final String EMPTY_LIST_FUNC = "empty_list";
-	protected static final boolean PRINTACTUALCODE = false;
+	protected static final boolean PRINT_ACTUAL_CODE = false;
+	protected static final List<String> SUPPORTED_FUNCTIONS = Arrays.asList("list_method", "int_method");
 
 	protected final boolean printLibraryFunctions;
 	public SCP outputTags(){
@@ -103,7 +105,7 @@ public class SCP extends FEReplacer
 
 	public Object visitFunction(Function func)
 	{
-		if(!func.getName().equals("list_method")){
+		if(!SUPPORTED_FUNCTIONS.contains(func.getName())){
 			return func;
 		}
 
@@ -201,7 +203,7 @@ public class SCP extends FEReplacer
 	@Override
 	public Object visitStmtIfThen(StmtIfThen stmt)
 	{
-		if(PRINTACTUALCODE) {
+		if(PRINT_ACTUAL_CODE) {
 			if (outtags && stmt.getTag() != null) {
 				out.println("T=" + stmt.getTag());
 			}
@@ -315,14 +317,14 @@ public class SCP extends FEReplacer
 		}
 
 		if(outtags && stmt.getTag() != null){ out.println("T="+stmt.getTag()); }
-		if(PRINTACTUALCODE) {
+		if(PRINT_ACTUAL_CODE) {
 			printLine("{");
 		}
 		indent++;
 		this.visitStmtBlockSuper(stmt);
 //		super.visitStmtBlock(stmt);
 		indent--;
-		if(PRINTACTUALCODE) {
+		if(PRINT_ACTUAL_CODE) {
 			printLine("}");
 		}
 		out.flush();
@@ -417,7 +419,7 @@ public class SCP extends FEReplacer
 		}
 
 		if(outtags && stmt.getTag() != null){ out.println("T="+stmt.getTag()); }
-		if(PRINTACTUALCODE){
+		if(PRINT_ACTUAL_CODE){
 			printLine(stmt.toString()  + ';');
 		}
 
@@ -501,7 +503,7 @@ public class SCP extends FEReplacer
 
 		if(outtags && stmt.getTag() != null){ out.println("T="+stmt.getTag()); }
 		{
-			if(PRINTACTUALCODE){
+			if(PRINT_ACTUAL_CODE){
 				printLine(stmt.toString() + ";");
 			}
 		}
@@ -517,7 +519,7 @@ public class SCP extends FEReplacer
 	public Object visitStmtReturn(StmtReturn stmt)
 	{
 		// priyan edit: Don't print return statement
-		if(PRINTACTUALCODE){
+		if(PRINT_ACTUAL_CODE){
 			printLine(stmt.toString());
 		}
 		return super.visitStmtReturn(stmt);
@@ -542,7 +544,7 @@ public class SCP extends FEReplacer
 				str += " = " + stmt.getInit(i);
 			}
 
-			if(PRINTACTUALCODE){
+			if(PRINT_ACTUAL_CODE){
 				printLine(str + ";");
 			}
 		}
