@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import sys
 whitespaces = [' ', '\t', '\n']
 symbols = ['+', '*', '/', '[', ']', '(', ')', ',', ':']
 def preprocess(filename):
@@ -185,4 +186,7 @@ def ptest2sk(filename, funcname):
     print(sktokens2skcode(transresult))
 
 if __name__ == '__main__':
-    ptest2sk("input.arr", "my-len")
+    if len(sys.argv) >= 3:
+        ptest2sk(sys.argv[1], sys.argv[2])
+    else:
+        ptest2sk("input.arr", "my-len")
