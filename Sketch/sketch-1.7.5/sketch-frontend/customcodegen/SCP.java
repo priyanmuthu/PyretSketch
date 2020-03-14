@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.util.TreeSet;
 import java.util.Vector;
 import java.util.List;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.io.OutputStream;
@@ -55,6 +56,7 @@ public class SCP extends FEReplacer
 	protected static final String HEAD_LIST_FUNC = "head@list";
 	protected static final String TAIL_LIST_FUNC = "tail";
 	protected static final String EMPTY_LIST_FUNC = "empty_list";
+	protected static final String ADD_LIST_FUNC = "add@list";
 	protected static final boolean PRINT_ACTUAL_CODE = false;
 	protected static final List<String> SUPPORTED_FUNCTIONS = Arrays.asList("list_method", "int_method");
 
@@ -539,8 +541,14 @@ public class SCP extends FEReplacer
 				String fStr = "empty";
 				variableMap.put(lastParamString, fStr);
 			}
+			else if(funcName.equals(ADD_LIST_FUNC)){
+				Collections.reverse(paramStrList);
+				paramStr = String.join(",", paramStrList);
+				String fStr = "link(" + paramStr + ")";
+				variableMap.put(lastParamString, fStr);
+			}
 			else {
-				String fStr = "" + exprFunCall.getName() + "(" + paramStr + ")";
+				String fStr = "" + funcName + "(" + paramStr + ")";
 				variableMap.put(lastParamString, fStr);
 			}
 		}
