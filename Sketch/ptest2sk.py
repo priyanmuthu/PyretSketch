@@ -109,15 +109,20 @@ def translate(lexresult):
     lists = [] # each element is a Python list, representing a Sketch list;
     # for each element, every element of the element is a Python list representing tokens of a Sketch list element
     currentListNo = -1
+    originalFuncnameCandidates = {}
+    isListProgram = False
     for tokensThisLine in lexresult:
         # sketch code is always like 'assert () == ();\n'
         sketchTokens.append('assert');
         sketchTokens.append('(');
+        functionCallMayExist = False
         i = 0
         while i < len(tokensThisLine):
             if tokensThisLine[i] == '[':
                 if len(tokensThisLine) > i + 2 and tokensThisLine[i+1] == 'list' and tokensThisLine[i+2] == ':':
                     # a Pyret list begins
+                    if functionCallMayExist == False:
+                        isListProgram = True # If there is no function call token preceeding [list: token, the function is a list function. (a stupid AI... 
                     i += 3
                     thislist = []
                     listbeginning = 1
@@ -141,13 +146,35 @@ def translate(lexresult):
                 sketchTokens.append(')')
                 sketchTokens.append('==')
                 sketchTokens.append('(')
+                functionCallMayExist = False
             else:
                 sketchTokens.append(tokensThisLine[i])
+                if tokensThisLine[i][0].isalpha() and i + 1 < len(tokensThisLine) and tokensThisLine[i+1] == '(':
+                    # print(tokensThisLine[i])
+                    functionCallMayExist = True
+                    if tokensThisLine[i] not in originalFuncnameCandidates:
+                        originalFuncnameCandidates[tokensThisLine[i]] = 1
+                    else:
+                        originalFuncnameCandidates[tokensThisLine[i]] += 1
+                    
             i += 1
         sketchTokens.append(')')
         sketchTokens.append(';')
     
-    # print(lists)
+    # print(originalFuncnameCandidates)
+    # Find the candidate who appears most often and infer it to be the original function name
+    # (a stupid AI...
+    max_count = 0
+    originalFuncname = ''
+    for name in originalFuncnameCandidates:
+        if originalFuncnameCandidates[name] > max_count:
+            originalFuncname = name
+            max_count = originalFuncnameCandidates[name]
+            
+    for i in range(len(sketchTokens)):
+        if sketchTokens[i] == originalFuncname:
+            sketchTokens[i] = 'list_method' if isListProgram else 'int_method'
+            
     listTokens = []
     for i in range(len(lists)):
         # now we define the list variables in Sketch
@@ -174,10 +201,10 @@ def sktokens2skcode(sketchTokens):
     return result
 
 
-def ptest2sk(filename, funcname):
+def ptest2sk(filename, funcname = ''):
     # Because Sketch doesn't support function names containing '-'
     # we need to change the Pyret function name
-    # currently this feature is not implemented, so the param 'funcname' is not used. 
+    # currently the Pyret function name is automatically inferred, so the param 'funcname' is not used. 
     preprocess(filename)
     lexresult = tokenize(filename.split('.', 1)[0] + '.tmp')
     # print(lexresult)
@@ -186,7 +213,7 @@ def ptest2sk(filename, funcname):
     print(sktokens2skcode(transresult))
 
 if __name__ == '__main__':
-    if len(sys.argv) >= 3:
-        ptest2sk(sys.argv[1], sys.argv[2])
+    if len(sys.argv) >= 2:
+        ptest2sk(sys.argv[1])
     else:
-        ptest2sk("input.arr", "my-len")
+        ptest2sk("input.arr")
