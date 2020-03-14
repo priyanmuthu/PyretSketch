@@ -1,0 +1,149 @@
+include "./sketchlib/list.skh";
+
+List<int> empty_list(){
+	return empty();
+}
+
+int max(int a, int b){
+    return a > b ? a : b;
+}
+
+boolean isEmptyList(List<int> a){
+	return a == empty_list();
+}
+
+List<int> tail(List<int> a){
+	return ((Cons<int>)a).next;
+}
+
+// Replacement ??
+generator int constgen(){
+	return {|0|1|2|3|};
+}
+
+generator int variableIntgen(List<int> a){
+	return head(a);
+}
+
+generator int recursiveIntgen(List<int> a){
+	if(??){
+		return head(a);
+	}
+	return int_method(simplelistgen(a));
+}
+
+generator int intgen(List<int> a, int bnd){
+    if (bnd == 0){return constgen();}
+	return {| constgen() |
+			constgen() + intgen(a, bnd-1)|
+			recursiveIntgen(a) + intgen(a, bnd-1)|
+			max(intgen(a, bnd-1), intgen(a, bnd-1))|};
+}
+
+generator int ifeint(List<int> a){
+    if(condgen(a)){
+        return intgen(a, 2);
+    }
+    else{
+        return intgen(a, 2);
+    }
+}
+
+generator int complexintgen(List<int> a){
+    return {|intgen(a, 2)|ifeint(a)|};
+}
+
+generator bit condgen(List<int> a){
+    return {|
+        variableIntgen(a) ( > | < | == ) constgen()|};
+}
+
+generator List<int> simplelistgen(List<int> a){
+    if(??){
+        return empty_list();
+    }
+    return tail(a);
+}
+
+generator List<int> listgen(List<int> a, int bnd){
+    if(bnd == 0){ return empty_list(); }
+    if(??){
+		return simplelistgen(a);
+        // return {| simplelistgen(a) | list_method(simplelistgen(a)) |};
+    }
+    return add(listgen(a, bnd - 1), variableIntgen(a));
+}
+
+int int_method(List<int> a) {
+	if(isEmptyList(a)) {
+		return complexintgen(a);
+	}else {
+        return complexintgen(a);
+	}
+}
+
+harness void main() {
+
+	// List of positive numbers
+
+	// List<int> a = empty();
+	// List<int> res_a = empty();
+	// List<int> b = add(add(add(a,3), -4), 5);
+	// List<int> res_b = add(add(a,3), 5);
+	// List<int> c = add(add(add(add(a,16), 14), -5), 1);
+	// List<int> res_c = add(add(add(a,16), 14), 1);
+	// List<int> d = add(add(add(add(a,-18), 14), 0), -10);
+	// List<int> res_d = add(add(a, 14), 0);
+	// assert list_method(a) == res_a;
+	// assert list_method(b) == res_b;
+	// assert list_method(c) == res_c;
+	// assert list_method(d) == res_d;
+
+	// Length of the list
+
+	// List<int> a = empty();
+	// List<int> b = add(add(add(a,3), 4), 5);
+	// List<int> c = add(add(add(add(a,16), 14), 5), 1);
+	// List<int> d = add(add(add(add(a,18), 14), 15), 10);
+	// assert int_method(a) == 0;
+	// assert int_method(b) == 3;
+	// assert int_method(c) == 4;
+	// assert int_method(d) == 4;
+
+	// Sum of the list
+
+	// List<int> a = empty();
+	// List<int> b = add(add(add(a,3), 4), 5);
+	// List<int> c = add(add(add(add(a,16), 14), 5), 1);
+	// List<int> d = add(add(add(add(a,18), 14), 15), 10);
+	// assert int_method(a) == 0;
+	// assert int_method(b) == 12;
+	// assert int_method(c) == 36;
+	// assert int_method(d) == 57;
+
+	// Maximum element of the list
+
+	// List<int> a = empty();
+	// List<int> b = add(add(add(a,3), 4), 5);
+	// List<int> c = add(add(add(add(a,16), 14), 5), 1);
+	// List<int> d = add(add(add(add(a,18), 14), 15), 10);
+	// assert int_method(a) == 0;
+	// assert int_method(b) == 5;
+	// assert int_method(c) == 16;
+	// assert int_method(d) == 18;
+
+	// Sum of positive numbers
+
+	List<int> a = empty();
+	int res_a = 0;
+	List<int> b = add(add(add(a,3), -4), 5);
+	int res_b = 8;
+	List<int> c = add(add(add(add(a,16), 14), -5), 1);
+	int res_c = 31;
+	List<int> d = add(add(add(add(a,-18), 14), 0), -10);
+	int res_d = 14;
+	assert int_method(a) == res_a;
+	assert int_method(b) == res_b;
+	assert int_method(c) == res_c;
+	assert int_method(d) == res_d;
+}

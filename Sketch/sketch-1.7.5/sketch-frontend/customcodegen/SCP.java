@@ -57,8 +57,9 @@ public class SCP extends FEReplacer
 	protected static final String TAIL_LIST_FUNC = "tail";
 	protected static final String EMPTY_LIST_FUNC = "empty_list";
 	protected static final String ADD_LIST_FUNC = "add@list";
+	protected static final String Max_FUNC = "max";
 	protected static final boolean PRINT_ACTUAL_CODE = false;
-	protected static final List<String> SUPPORTED_FUNCTIONS = Arrays.asList("list_method", "int_method");
+	protected static final List<String> SUPPORTED_FUNCTIONS = Arrays.asList("list_method", "int_method", "list_to_list");
 
 	protected final boolean printLibraryFunctions;
 	public SCP outputTags(){
@@ -546,6 +547,16 @@ public class SCP extends FEReplacer
 				paramStr = String.join(",", paramStrList);
 				String fStr = "link(" + paramStr + ")";
 				variableMap.put(lastParamString, fStr);
+			}
+			else if(funcName.equals(Max_FUNC)){
+				if(paramStr.equals("0,0")){
+					String fStr = "0";
+					variableMap.put(lastParamString, fStr);
+				}
+				else {
+					String fStr = "" + "num-max" + "(" + paramStr + ")";
+					variableMap.put(lastParamString, fStr);
+				}
 			}
 			else {
 				String fStr = "" + funcName + "(" + paramStr + ")";

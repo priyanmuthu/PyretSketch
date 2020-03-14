@@ -1,0 +1,71 @@
+SKETCH version 1.7.5
+Benchmark = ../../master.sk
+Class customcodegen.SCP$1 is not a code generator
+Class customcodegen.SCP is a code generator.
+Generating code with customcodegen.SCP
+/* BEGIN PACKAGE ANONYMOUS*/
+priyan FunctionName: _main
+priyan FunctionName: empty_list
+priyan FunctionName: equals_List_s0
+priyan FunctionName: list_method
+/*../../master.sk:76*/
+
+void list_method (List<int> a, ref List<int> _out)/*../../master.sk:80*/
+{
+  bit _out_s68 = 0;                                             // StmtVarDecl
+  isEmptyList(a, _out_s68);                                     // StmtExpr
+  if(_out_s68)/*../../master.sk:81*/                            // StmtIfThen
+  {
+    List@list<int> _out_s87 = null;                             // StmtVarDecl
+    empty_list(_out_s87);                                       // StmtExpr
+    _out = _out_s87;                                            // StmtAssign
+    return;                                                     // StmtReturn
+  }
+  else
+  {
+    int _out_s99 = 0;                                           // StmtVarDecl
+    head@list(a, _out_s99)//{T=int};                            // StmtExpr
+    List@list<int> _out_s77 = null;                             // StmtVarDecl
+    if(_out_s99 < 0)/*../../master.sk:68*/                      // StmtIfThen
+    {
+      List@list<int> _out_s89 = ((Cons<int>)a).next;            // StmtVarDecl
+      List@list<int> _out_s91 = null;                           // StmtVarDecl
+      list_method(_out_s89, _out_s91)//{};                      // StmtExpr
+      _out_s77 = _out_s91;                                      // StmtAssign
+    }
+    else
+    {
+      List@list<int> _out_s89_0 = ((Cons<int>)a).next;          // StmtVarDecl
+      List@list<int> _out_s91_0 = null;                         // StmtVarDecl
+      list_method(_out_s89_0, _out_s91_0)//{};                  // StmtExpr
+      int _out_s99_0 = 0;                                       // StmtVarDecl
+      head@list(a, _out_s99_0)//{T=int};                        // StmtExpr
+      List@list<int> _out_s97 = null;                           // StmtVarDecl
+      add@list(_out_s91_0, _out_s99_0, _out_s97)//{T=int};      // StmtExpr
+      _out_s77 = _out_s97;                                      // StmtAssign
+    }
+    _out = _out_s77;                                            // StmtAssign
+    return;                                                     // StmtReturn
+  }
+}
+priyan FunctionName: main__Wrapper
+priyan FunctionName: main__WrapperNospec
+/* END PACKAGE ANONYMOUS*/
+/* BEGIN PACKAGE list*/
+struct List {
+    @Immutable()
+}
+struct Cons {
+    T val;
+    List<T> next;
+    @Immutable()
+}
+struct Nil {
+    @Immutable()
+}
+priyan FunctionName: add
+priyan FunctionName: empty
+priyan FunctionName: head
+/* END PACKAGE list*/
+[SKETCH] DONE
+Total time = 5418
