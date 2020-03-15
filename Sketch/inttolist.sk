@@ -1,0 +1,72 @@
+include "./sketchlib/list.skh";
+
+List<int> empty_list(){
+	return empty();
+}
+
+int max(int a, int b){
+    return a > b ? a : b;
+}
+
+boolean isEmptyList(List<int> a){
+	return a == empty_list();
+}
+
+List<int> tail(List<int> a){
+	return ((Cons<int>)a).next;
+}
+
+// Replacement ??
+generator int constgen(){
+	return {|0|1|2|3|};
+}
+
+generator int intgen(int a, int bnd){
+    if (bnd == 0){return constgen();}
+	return {| constgen() |
+            a |
+			intgen(a, bnd-1) + constgen()|
+			intgen(a, bnd-1) - constgen()|};
+}
+
+generator bit condgen(int a){
+    // return {| intgen(a, 1) ( > | < | == ) constgen() |};
+    return a < 0;
+}
+
+generator List<int> listgen(int a, int bnd){
+    if(bnd == 0){ return empty_list(); }
+    if(??){
+        return {| empty_list() | sketch_method(intgen(a, 2)) |};
+    }
+    return add(listgen(a, bnd - 1), intgen(a, 2));
+}
+
+generator List<int> ifelist(int a){
+    if(condgen(a)){
+        return listgen(a, 2);
+    }
+    else{
+        return listgen(a, 2);
+    }
+}
+
+generator List<int> complexlistgen(int a){
+    return {|listgen(a, 2)|ifelist(a)|};
+}
+
+List<int> sketch_method(int a) {
+	return ifelist(a);
+}
+
+harness void main() {
+    List<int> em = empty_list();
+	List<int> __l0 = add ( em , 0 ) ;
+    List<int> __l1 = add ( add ( em , 0 ) , 1 ) ;
+    List<int> __l2 = add ( add ( add ( em , 0 ) , 1 ) , 2 ) ;
+    List<int> __l3 = add ( add ( add ( add ( em , 0 ) , 1 ) , 2 ) , 3 ) ;
+    assert ( sketch_method ( 0 ) ) == ( __l0 ) ;
+    assert ( sketch_method ( 1 ) ) == ( __l1 ) ;
+    assert ( sketch_method ( 2 ) ) == ( __l2 ) ;
+    assert ( sketch_method ( 3 ) ) == ( __l3 ) ;
+}

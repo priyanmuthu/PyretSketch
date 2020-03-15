@@ -8,5 +8,8 @@
 # VS Code
 .vscode/
 
+# tmp files
+*.tmp
+
 # venv
 venv

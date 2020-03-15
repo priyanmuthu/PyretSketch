@@ -106,18 +106,18 @@ harness void main() {
 
 	// List of positive numbers
 
-	List<int> a = empty();
-	List<int> res_a = empty();
-	List<int> b = add(add(add(a,3), -4), 5);
-	List<int> res_b = add(add(a,3), 5);
-	List<int> c = add(add(add(add(a,16), 14), -5), 1);
-	List<int> res_c = add(add(add(a,16), 14), 1);
-	List<int> d = add(add(add(add(a,-18), 14), 0), -10);
-	List<int> res_d = add(add(a, 14), 0);
-	assert list_method(a) == res_a;
-	assert list_method(b) == res_b;
-	assert list_method(c) == res_c;
-	assert list_method(d) == res_d;
+	// List<int> a = empty();
+	// List<int> res_a = empty();
+	// List<int> b = add(add(add(a,3), -4), 5);
+	// List<int> res_b = add(add(a,3), 5);
+	// List<int> c = add(add(add(add(a,16), 14), -5), 1);
+	// List<int> res_c = add(add(add(a,16), 14), 1);
+	// List<int> d = add(add(add(add(a,-18), 14), 0), -10);
+	// List<int> res_d = add(add(a, 14), 0);
+	// assert list_method(a) == res_a;
+	// assert list_method(b) == res_b;
+	// assert list_method(c) == res_c;
+	// assert list_method(d) == res_d;
 
 	// Length of the list
 
@@ -166,4 +166,17 @@ harness void main() {
 	// assert int_method(b) == res_b;
 	// assert int_method(c) == res_c;
 	// assert int_method(d) == res_d;
+
+	// count of zeros
+
+	List<int> __l0 = add ( add ( add ( add ( empty ( ) , 0 ) , 0 ) , 0 ) , 4 ) ;
+	List<int> __l1 = add ( add ( add ( add ( empty ( ) , 0 ) , 2 ) , 0 ) , 1 ) ;
+	List<int> __l2 = add ( add ( add ( add ( empty ( ) , 0 ) , 2 ) , 0 ) , 0 ) ;
+	List<int> __l3 = add ( add ( add ( add ( add ( add ( add ( add ( empty ( ) , 5 ) , 0 ) , 0 ) , 5 ) , 0 ) , 1 ) , 0 ) , 2 ) ;
+	List<int> __l4 = empty ( ) ;
+	assert ( sketch_method ( __l0 ) ) == ( 3 ) ;
+	assert ( sketch_method ( __l1 ) ) == ( 2 ) ;
+	assert ( sketch_method ( __l2 ) ) == ( 3 ) ;
+	assert ( sketch_method ( __l3 ) ) == ( 4 ) ;
+	assert ( sketch_method ( __l4 ) ) == ( 0 ) ;
 }

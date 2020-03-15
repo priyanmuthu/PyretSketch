@@ -84,6 +84,16 @@ int int_method(List<int> a) {
 
 harness void main() {
 
+	List<int> __l0 = add ( add ( add ( empty ( ) , 7 ) , 8 ) , 9 ) ;
+	List<int> __l1 = add ( add ( empty ( ) , 8 ) , 9 ) ;
+	List<int> __l2 = add ( empty ( ) , 9 ) ;
+	List<int> __l3 = empty ( ) ;
+	assert ( int_method ( __l0 ) ) == ( 1 + 2 ) ;
+	assert ( int_method ( __l1 ) ) == ( 1 + 1 ) ;
+	assert ( int_method ( __l2 ) ) == ( 1 + 0 ) ;
+	assert ( int_method ( __l3 ) ) == ( 0 ) ;
+
+
 	// List of positive numbers
 
 	// List<int> a = empty();
@@ -134,16 +144,16 @@ harness void main() {
 
 	// Sum of positive numbers
 
-	List<int> a = empty();
-	int res_a = 0;
-	List<int> b = add(add(add(a,3), -4), 5);
-	int res_b = 8;
-	List<int> c = add(add(add(add(a,16), 14), -5), 1);
-	int res_c = 31;
-	List<int> d = add(add(add(add(a,-18), 14), 0), -10);
-	int res_d = 14;
-	assert int_method(a) == res_a;
-	assert int_method(b) == res_b;
-	assert int_method(c) == res_c;
-	assert int_method(d) == res_d;
+	// List<int> a = empty();
+	// int res_a = 0;
+	// List<int> b = add(add(add(a,3), -4), 5);
+	// int res_b = 8;
+	// List<int> c = add(add(add(add(a,16), 14), -5), 1);
+	// int res_c = 31;
+	// List<int> d = add(add(add(add(a,-18), 14), 0), -10);
+	// int res_d = 14;
+	// assert int_method(a) == res_a;
+	// assert int_method(b) == res_b;
+	// assert int_method(c) == res_c;
+	// assert int_method(d) == res_d;
 }

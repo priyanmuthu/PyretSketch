@@ -59,7 +59,7 @@ public class SCP extends FEReplacer
 	protected static final String ADD_LIST_FUNC = "add@list";
 	protected static final String Max_FUNC = "max";
 	protected static final boolean PRINT_ACTUAL_CODE = false;
-	protected static final List<String> SUPPORTED_FUNCTIONS = Arrays.asList("list_method", "int_method", "list_to_list");
+	protected static final List<String> SUPPORTED_FUNCTIONS = Arrays.asList("list_method", "int_method", "list_to_list", "sketch_method");
 
 	protected final boolean printLibraryFunctions;
 	public SCP outputTags(){
@@ -231,7 +231,7 @@ public class SCP extends FEReplacer
 			if(stmt.getCond() instanceof ExprVar){
 				// Most probably check for empty list
 				// Todo: Check if the condition is for empty list
-				printLine("cases (list) " + inputParamName + ":");
+				printLine("cases (List) " + inputParamName + ":");
 				indent++;
 				printLine("| empty =>");
 				printIndentedStatement(stmt.getCons());
@@ -426,16 +426,7 @@ public class SCP extends FEReplacer
 		lhs = stmt.getLHS().toString();
 		if(stmt.getRHS() instanceof ExprBinary){
 			ExprBinary rhsExpr = (ExprBinary)stmt.getRHS();
-			String rightStr = rhsExpr.getRight().toString();
-			String leftStr = rhsExpr.getLeft().toString();
-			if(rhsExpr.getRight() instanceof ExprVar && variableMap.containsKey(rightStr)){
-				rightStr = variableMap.get(rightStr);
-			}
-			if(rhsExpr.getLeft() instanceof ExprVar && variableMap.containsKey(leftStr)){
-				leftStr = variableMap.get(leftStr);
-			}
-
-			rhs = ExprBinaryString(rhsExpr, leftStr, rightStr);
+			rhs = ExprBinaryString(rhsExpr);
 		}
 		else {
 			rhs = stmt.getRHS().toString();
@@ -461,7 +452,20 @@ public class SCP extends FEReplacer
 		return super.visitStmtAssign(stmt);
 	}
 
-	public String ExprBinaryString(ExprBinary expr, String leftStr, String rightStr)
+	public String ExprBinaryString(ExprBinary expr){
+		String rightStr = expr.getRight().toString();
+		String leftStr = expr.getLeft().toString();
+		if(expr.getRight() instanceof ExprVar && variableMap.containsKey(rightStr)){
+			rightStr = variableMap.get(rightStr);
+		}
+		if(expr.getLeft() instanceof ExprVar && variableMap.containsKey(leftStr)){
+			leftStr = variableMap.get(leftStr);
+		}
+
+		return ExprBinaryToString(expr, leftStr, rightStr);
+	}
+
+	public String ExprBinaryToString(ExprBinary expr, String leftStr, String rightStr)
 	{
 		String theOp = expr.getOpString();
 		String lstr, rstr;
@@ -525,7 +529,19 @@ public class SCP extends FEReplacer
 				} else if (pStr.equals(lastParamString)) {
 					continue;
 				}
-				paramStrList.add(variableMap.get(pStr));
+
+				if(p instanceof ExprBinary){
+					ExprBinary pExpr = (ExprBinary) p;
+					paramStrList.add(ExprBinaryString(pExpr));
+				}
+				else {
+
+					if (!variableMap.containsKey(pStr)) {
+						printLine("no key: " + pStr);
+						printLine(p.getClass().getName());
+					}
+					paramStrList.add(variableMap.get(pStr));
+				}
 			}
 
 			String paramStr = String.join(",", paramStrList);
