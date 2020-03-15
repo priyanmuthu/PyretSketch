@@ -104,25 +104,34 @@ def tokenize(filename):
 # this function takes the result of function 'tokenize' as input
 # translates Pyret tokens to Sketch tokens
 # returns a list of Sketch tokens
+# as well as Pyret function signature containing name, return type and param type
 def translate(lexresult):
     sketchTokens = [] # a list that will contain the tokens of Sketch assertions
     lists = [] # each element is a Python list, representing a Sketch list;
     # for each element, every element of the element is a Python list representing tokens of a Sketch list element
     currentListNo = -1
     originalFuncnameCandidates = {}
+    paramTypeCandidates = {'Integer':0, 'List':0}
     isListProgram = False
     for tokensThisLine in lexresult:
         # sketch code is always like 'assert () == ();\n'
         sketchTokens.append('assert');
         sketchTokens.append('(');
         functionCallMayExist = False
+        nextTokenIsArg = False
         i = 0
         while i < len(tokensThisLine):
+            if nextTokenIsArg and tokensThisLine[i] != '(':
+                if tokensThisLine[i] == '[' or tokensThisLine[i] == 'empty':
+                    paramTypeCandidates['List'] += 1
+                else:
+                    paramTypeCandidates['Integer'] += 1
+                nextTokenIsArg = False
             if tokensThisLine[i] == '[':
                 if len(tokensThisLine) > i + 2 and tokensThisLine[i+1] == 'list' and tokensThisLine[i+2] == ':':
                     # a Pyret list begins
                     if functionCallMayExist == False:
-                        isListProgram = True # If there is no function call token preceeding [list: token, the function is a list function. (a stupid AI... 
+                        isListProgram = True # If there is no function call token preceeding '[list:' token, the function is a list function. (a stupid AI... 
                     i += 3
                     thislist = []
                     listbeginning = 1
@@ -152,6 +161,7 @@ def translate(lexresult):
                 if tokensThisLine[i][0].isalpha() and i + 1 < len(tokensThisLine) and tokensThisLine[i+1] == '(':
                     # print(tokensThisLine[i])
                     functionCallMayExist = True
+                    nextTokenIsArg = True
                     if tokensThisLine[i] not in originalFuncnameCandidates:
                         originalFuncnameCandidates[tokensThisLine[i]] = 1
                     else:
@@ -174,7 +184,14 @@ def translate(lexresult):
     for i in range(len(sketchTokens)):
         if sketchTokens[i] == originalFuncname:
             sketchTokens[i] = 'list_method' if isListProgram else 'int_method'
-            
+
+    max_count = 0
+    paramType = ''
+    for ty in paramTypeCandidates:
+        if paramTypeCandidates[ty] > max_count:
+            paramType = ty
+            max_count = paramTypeCandidates[ty]
+
     listTokens = []
     for i in range(len(lists)):
         # now we define the list variables in Sketch
@@ -187,7 +204,7 @@ def translate(lexresult):
         listTokens += rhsTokens + [';']
     
     # the result is the concatination of var defs and assertions
-    return listTokens + sketchTokens
+    return listTokens + sketchTokens, [originalFuncname, 'List' if isListProgram else 'Integer', paramType]
 
 # this function takes sketch tokens as input
 # returns the text of the Sketch harness function body
@@ -202,18 +219,25 @@ def sktokens2skcode(sketchTokens):
 
 
 def ptest2sk(filename, funcname = ''):
+    # Just packing of calling preprocessing, tokenizing and translating
     # Because Sketch doesn't support function names containing '-'
     # we need to change the Pyret function name
     # currently the Pyret function name is automatically inferred, so the param 'funcname' is not used. 
+    # returns a list of Sketch tokens
+    # as well as Pyret function signature containing name, return type and param type
     preprocess(filename)
     lexresult = tokenize(filename.split('.', 1)[0] + '.tmp')
     # print(lexresult)
-    transresult = translate(lexresult)
-    # print(transresult)
-    print(sktokens2skcode(transresult))
+    transresult, funcSignature = translate(lexresult)
+    return transresult, funcSignature
+    
 
 if __name__ == '__main__':
+    transresult = ''
+    funcSignature = []
     if len(sys.argv) >= 2:
-        ptest2sk(sys.argv[1])
+        transresult, funcSignature = ptest2sk(sys.argv[1])
     else:
-        ptest2sk("input.arr")
+        transresult, funcSignature = ptest2sk("input.arr")
+    # print(funcSignature)
+    print(sktokens2skcode(transresult))
