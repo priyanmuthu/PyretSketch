@@ -229,15 +229,29 @@ def ptest2sk(filename, funcname = ''):
     lexresult = tokenize(filename.split('.', 1)[0] + '.tmp')
     # print(lexresult)
     transresult, funcSignature = translate(lexresult)
-    return transresult, funcSignature
+    return transresult
     
+def getFuncSignature(filename, funcname = ''):
+    # Just packing of calling preprocessing, tokenizing and translating
+    # Because Sketch doesn't support function names containing '-'
+    # we need to change the Pyret function name
+    # currently the Pyret function name is automatically inferred, so the param 'funcname' is not used. 
+    # returns a list of Sketch tokens
+    # as well as Pyret function signature containing name, return type and param type
+    preprocess(filename)
+    lexresult = tokenize(filename.split('.', 1)[0] + '.tmp')
+    # print(lexresult)
+    transresult, funcSignature = translate(lexresult)
+    return funcSignature
 
 if __name__ == '__main__':
     transresult = ''
     funcSignature = []
     if len(sys.argv) >= 2:
-        transresult, funcSignature = ptest2sk(sys.argv[1])
+        transresult = ptest2sk(sys.argv[1])
+        funcSignature = getFuncSignature(sys.argv[1])
     else:
-        transresult, funcSignature = ptest2sk("input.arr")
+        transresult = ptest2sk("input.arr")
+        funcSignature = getFuncSignature("input.arr")
     # print(funcSignature)
     print(sktokens2skcode(transresult))
