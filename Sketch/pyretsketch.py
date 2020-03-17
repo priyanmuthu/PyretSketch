@@ -38,7 +38,10 @@ def run(filename: str):
         elif return_type == 'Integer':
             print('Unspported now')
 
-    solution_file = os.path.basename(filename).split('.', 1)[0] + '_sol.arr'
+    # Putting it in out directory
+    if not os.path.exists('out'):
+        os.makedirs('out')
+    solution_file = './out/' + os.path.basename(filename).split('.', 1)[0] + '_sol.arr'
 
     print(solution_file)
     result_str = process_result(result_str)

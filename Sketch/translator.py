@@ -3,6 +3,7 @@ import sys
 import subprocess
 import os
 from string import Template
+import tempfile
 
 whitespaces = [' ', '\t', '\n']
 symbols = ['+', '*', '/', '[', ']', '(', ')', ',', ':']
@@ -17,7 +18,9 @@ def preprocess(filename):
         if line == "where:":
             break
     # print("'where:' found")
-    fout = open(filename.split('.', 1)[0] + '.tmp', 'w')
+    new_file, temp_file_name = tempfile.mkstemp()
+    os.close(new_file)
+    fout = open(temp_file_name, 'w')
     flag = 0 #0: normal 1: whitespace detected, discard following contiguous whitespaces
     while True:
         line = f.readline()
@@ -57,7 +60,7 @@ def preprocess(filename):
         fout.write('\n')
     f.close()
     fout.close()
-    return 1
+    return temp_file_name
 
 
 # this function reads a preprocessed Pyret file
@@ -233,8 +236,8 @@ def ptest2sk(filename, funcname = ''):
     # currently the Pyret function name is automatically inferred, so the param 'funcname' is not used. 
     # returns a list of Sketch tokens
     # as well as Pyret function signature containing name, return type and param type
-    preprocess(filename)
-    lexresult = tokenize(filename.split('.', 1)[0] + '.tmp')
+    temp_file_name = preprocess(filename)
+    lexresult = tokenize(temp_file_name)
     # print(lexresult)
     transresult, funcSignature = translate(lexresult)
     translated_code = sktokens2skcode(transresult)

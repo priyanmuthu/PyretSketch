@@ -46,7 +46,13 @@ def synthesize_int_to_list(translated_code: str, benchmark_file: str):
 def get_sketch_from_template(template_path: str, translated_code: str, benchmark_file: str):
     sketch_template = Template(UtilMethods.text_from_file(template_path))
     sketch_string = sketch_template.substitute(assert_statements=translated_code)
-    sk_file_name = os.path.basename(benchmark_file).split('.', 1)[0] + '.sk'
+
+    # Putting it in out directory
+    if not os.path.exists('out'):
+        os.makedirs('out')
+    sk_file_name = './out/' + os.path.basename(benchmark_file).split('.', 1)[0] + '.sk'
+    sk_file_name = os.path.abspath(sk_file_name)
+    print(sk_file_name)
     UtilMethods.write_text_to_file(sk_file_name, sketch_string)
     print('Sketch generated. Store in : ', sk_file_name)
     return sk_file_name
