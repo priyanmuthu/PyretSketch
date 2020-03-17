@@ -50,32 +50,10 @@ generator List<int> ifelist(int a){
     }
 }
 
-generator List<int> complexlistgen(int a){
-    return {|listgen(a, 2)|ifelist(a)|};
-}
-
 List<int> sketch_method(int a) {
-	return ifelist(a);
+	return {|listgen(a, 2)|ifelist(a)|};
 }
 
 harness void main() {
-    List<int> em = empty_list();
-	List<int> __l0 = add ( em , 0 ) ;
-    List<int> __l1 = add ( add ( em , 0 ) , 1 ) ;
-    List<int> __l2 = add ( add ( add ( em , 0 ) , 1 ) , 2 ) ;
-    List<int> __l3 = add ( add ( add ( add ( em , 0 ) , 1 ) , 2 ) , 3 ) ;
-    assert ( sketch_method ( 0 ) ) == ( __l0 ) ;
-    assert ( sketch_method ( 1 ) ) == ( __l1 ) ;
-    assert ( sketch_method ( 2 ) ) == ( __l2 ) ;
-    assert ( sketch_method ( 3 ) ) == ( __l3 ) ;
-
-    // List<int> emlist = empty() ;
-    // List<int> __l0 = emlist ;
-    // List<int> __l1 = add ( emlist , 0 ) ;
-    // List<int> __l2 = add ( add ( emlist , 0 ) , 0 ) ;
-    // List<int> __l3 = add ( add ( add ( emlist , 0 ) , 0 ) , 0 ) ;
-    // assert ( sketch_method ( 0 ) ) == ( __l0 ) ;
-    // assert ( sketch_method ( 1 ) ) == ( __l1 ) ;
-    // assert ( sketch_method ( 2 ) ) == ( __l2 ) ;
-    // assert ( sketch_method ( 3 ) ) == ( __l3 ) ;
+    ${assert_statements}
 }

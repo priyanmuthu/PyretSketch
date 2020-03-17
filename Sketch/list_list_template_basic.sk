@@ -1,0 +1,79 @@
+include "./sketchlib/list.skh";
+
+List<int> empty_list(){
+	return empty();
+}
+
+int max(int a, int b){
+    return a > b ? a : b;
+}
+
+boolean isEmptyList(List<int> a){
+	return a == empty_list();
+}
+
+List<int> tail(List<int> a){
+	return ((Cons<int>)a).next;
+}
+
+// Replacement ??
+generator int constgen(){
+	return {|0|1|2|3|};
+}
+
+generator int variableIntgen(List<int> a){
+	return head(a);
+}
+
+generator int intgen(List<int> a, int bnd){
+    if (bnd == 0){return constgen();}
+	return {| constgen() |
+			variableIntgen(a) |
+			constgen() + intgen(a, bnd-1)|
+            constgen() * intgen(a, bnd-1)|};
+}
+
+generator bit condgen(List<int> a){
+    return {|
+        variableIntgen(a) ( > | < | == ) constgen()|};
+}
+
+generator List<int> simplelistgen(List<int> a){
+    if(??){
+        return empty_list();
+    }
+    return tail(a);
+}
+
+generator List<int> listgen(List<int> a, int bnd){
+    if(bnd == 0){ return empty_list(); }
+    if(??){
+        return {| simplelistgen(a) | sketch_method(simplelistgen(a)) |};
+    }
+    return add(listgen(a, bnd - 1), intgen(a, 2));
+}
+
+generator List<int> ifelist(List<int> a){
+    if(condgen(a)){
+        return listgen(a, 2);
+    }
+    else{
+        return listgen(a, 3);
+    }
+}
+
+generator List<int> complexlistgen(List<int> a){
+    return {|listgen(a, 2)|ifelist(a)|};
+}
+
+List<int> sketch_method(List<int> a) {
+	if(isEmptyList(a)) {
+		return complexlistgen(a);
+	}else {
+        return complexlistgen(a);
+	}
+}
+
+harness void main() {
+    ${assert_statements}
+}

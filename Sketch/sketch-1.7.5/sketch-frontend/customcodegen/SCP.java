@@ -140,6 +140,7 @@ public class SCP extends FEReplacer
 			super.visitFunction(func);
 		}
 		catch (Exception e){
+			printLine("Error occured");
 			printLine(e.getStackTrace()[0].toString());
 		}
 		out.println("end");
@@ -247,8 +248,11 @@ public class SCP extends FEReplacer
 			else if(stmt.getCond() instanceof ExprBinary){
 				if(((ExprBinary)stmt.getCond()).getLeft() instanceof  ExprVar){
 					// We have something better to print
+					String condStr = stmt.getCond().toString();
 					String condVar = ((ExprVar)((ExprBinary)stmt.getCond()).getLeft()).toString();
-					String condStr = stmt.getCond().toString().replace(condVar, variableMap.get(condVar));
+					if(variableMap.containsKey(condVar)) {
+						condStr = stmt.getCond().toString().replace(condVar, variableMap.get(condVar));
+					}
 					printLine("if " + condStr + ":");
 					printIndentedStatement(stmt.getCons());
 					if (stmt.getAlt() != null) {
@@ -424,6 +428,7 @@ public class SCP extends FEReplacer
 		String lhs, rhs;
 
 		lhs = stmt.getLHS().toString();
+
 		if(stmt.getRHS() instanceof ExprBinary){
 			ExprBinary rhsExpr = (ExprBinary)stmt.getRHS();
 			rhs = ExprBinaryString(rhsExpr);
@@ -455,11 +460,21 @@ public class SCP extends FEReplacer
 	public String ExprBinaryString(ExprBinary expr){
 		String rightStr = expr.getRight().toString();
 		String leftStr = expr.getLeft().toString();
+
+		// Getting right str
 		if(expr.getRight() instanceof ExprVar && variableMap.containsKey(rightStr)){
 			rightStr = variableMap.get(rightStr);
 		}
+		else if(expr.getRight() instanceof ExprBinary){
+			rightStr = ExprBinaryString((ExprBinary)expr.getRight());
+		}
+
+		// Getting left str
 		if(expr.getLeft() instanceof ExprVar && variableMap.containsKey(leftStr)){
 			leftStr = variableMap.get(leftStr);
+		}
+		else if(expr.getLeft() instanceof ExprBinary){
+			leftStr = ExprBinaryString((ExprBinary)expr.getLeft());
 		}
 
 		return ExprBinaryToString(expr, leftStr, rightStr);
@@ -620,7 +635,13 @@ public class SCP extends FEReplacer
 		if(outtags && stmt.getTag() != null){ out.println("T="+stmt.getTag()); }
 
 		for (int i = 0; i < stmt.getNumVars(); i++) {
-			variableMap.put(stmt.getName(i), stmt.getInit(i).toString());
+			String init_str = stmt.getInit(i).toString();
+
+			if(stmt.getInit(i) instanceof ExprBinary){
+				init_str = ExprBinaryString((ExprBinary)stmt.getInit(i));
+			}
+
+			variableMap.put(stmt.getName(i), init_str);
 //			printLine("" + stmt.getName(i) + ": " + stmt.getInit(i).toString());
 			String str = stmt.getType(i) + " " + stmt.getName(i);
 			if (stmt.getInit(i) != null) {

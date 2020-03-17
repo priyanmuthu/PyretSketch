@@ -134,7 +134,7 @@ Sketch Temp notes
 
 Run statements for custom code gen
 
-javac -cp sketch-1.7.6-noarch.jar customcodegen/SCP.java
+javac -cp sketch-1.7.5-noarch.jar customcodegen/SCP.java
 
 jar -cvf customcodegen.jar customcodegen/
 

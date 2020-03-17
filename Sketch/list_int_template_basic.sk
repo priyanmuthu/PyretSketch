@@ -29,25 +29,22 @@ generator int recursiveIntgen(List<int> a){
 	if(??){
 		return head(a);
 	}
-	return sketch_method(tail(a));
+	return sketch_method(simplelistgen(a));
 }
 
 generator int intgen(List<int> a, int bnd){
     if (bnd == 0){return constgen();}
 	return {| constgen() |
-			recursiveIntgen(a) + intgen(a, bnd-1)|
-			constgen() + intgen(a, bnd-1)|};
-			// max(intgen(a, bnd-1), intgen(a, bnd-1))|};
+			constgen() + intgen(a, bnd-1)|
+			recursiveIntgen(a) + intgen(a, bnd-1)|};
 }
 
 generator int ifeint(List<int> a){
     if(condgen(a)){
-        // return intgen(a, 2);
-		return 1 + sketch_method(tail(a));
+        return intgen(a, 2);
     }
     else{
-        return recursiveIntgen(a);
-        // return sketch_method(tail(a));
+        return intgen(a, 2);
     }
 }
 
@@ -56,9 +53,8 @@ generator int complexintgen(List<int> a){
 }
 
 generator bit condgen(List<int> a){
-    // return {|
-	// 	variableIntgen(a) ( > | < | == ) constgen()|};
-	return head(a) == 0;
+    return {|
+        variableIntgen(a) ( > | < | == ) constgen()|};
 }
 
 generator List<int> simplelistgen(List<int> a){
@@ -72,30 +68,20 @@ generator List<int> listgen(List<int> a, int bnd){
     if(bnd == 0){ return empty_list(); }
     if(??){
 		return simplelistgen(a);
-        // return {| simplelistgen(a) | list_method(simplelistgen(a)) |};
     }
     return add(listgen(a, bnd - 1), variableIntgen(a));
 }
 
 int sketch_method(List<int> a) {
 	if(isEmptyList(a)) {
-		return intgen(a, 1);
+		return complexintgen(a);
 	}else {
-        return ifeint(a);
+        return complexintgen(a);
 	}
 }
 
 harness void main() {
 
-	List<int> __l0 = add ( add ( add ( add ( empty ( ) , 0 ) , 0 ) , 0 ) , 4 ) ;
-	List<int> __l1 = add ( add ( add ( add ( empty ( ) , 0 ) , 2 ) , 0 ) , 1 ) ;
-	List<int> __l2 = add ( add ( add ( add ( empty ( ) , 0 ) , 2 ) , 0 ) , 0 ) ;
-	List<int> __l3 = add ( add ( add ( add ( add ( add ( add ( add ( empty ( ) , 5 ) , 0 ) , 0 ) , 5 ) , 0 ) , 1 ) , 0 ) , 2 ) ;
-	List<int> __l4 = empty ( ) ;
-	assert ( sketch_method ( __l0 ) ) == ( 3 ) ;
-	assert ( sketch_method ( __l1 ) ) == ( 2 ) ;
-	assert ( sketch_method ( __l2 ) ) == ( 3 ) ;
-	assert ( sketch_method ( __l3 ) ) == ( 4 ) ;
-	assert ( sketch_method ( __l4 ) ) == ( 0 ) ;
+	${assert_statements}
 
 }
