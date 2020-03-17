@@ -1,17 +1,21 @@
 #|
-    Problem 4: my-str-len: Given a list of strings, convert each string to a number representing its length.
+    Problem 4: my-neg-sum: Given a list of numbers, calculate the sum of all the negative numbers
 |#
 
-fun my-str-len(l):
+fun my-neg-sum(l):
   cases (List) l:
-    | empty      => empty
-    | link(f, r) => link(string-length(f), my-str-len(r))
+    | empty      => 0
+    | link(f, r) => 
+      if f < 0:
+        f + my-neg-sum(r)
+      else:
+        my-neg-sum(r)
+      end
   end
 where:
-    my-str-len([list: "hello", "world", "here", "are", "examples"]) is [list: 5, 5, 4, 3, 8]
-    my-str-len([list: "world", "here", "are", "examples"]) is [list: 5, 4, 3, 8]
-    my-str-len([list: "here", "are", "examples"]) is [list: 4, 3, 8]
-    my-str-len([list: "are", "examples"]) is [list: 3, 8]
-    my-str-len([list: "examples"]) is [list: 8]
-    my-str-len([list: ]) is [list: ]
+    my-neg-sum([list: 1, -2, 3, -4]) is -6
+    my-neg-sum([list:    -2, 3, -4]) is -6
+    my-neg-sum([list:        3, -4]) is -4
+    my-neg-sum([list:           -4]) is -4
+    my-neg-sum([list:             ]) is 0
 end

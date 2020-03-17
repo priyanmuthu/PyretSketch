@@ -35,6 +35,7 @@ generator int recursiveIntgen(List<int> a){
 generator int intgen(List<int> a, int bnd){
     if (bnd == 0){return constgen();}
 	return {| constgen() |
+            recursiveIntgen(a) |
 			constgen() + intgen(a, bnd-1)|
 			recursiveIntgen(a) + intgen(a, bnd-1)|
 			max(intgen(a, bnd-1), intgen(a, bnd-1))|};
