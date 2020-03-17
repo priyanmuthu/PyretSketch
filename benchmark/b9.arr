@@ -1,19 +1,12 @@
-fun my-fibo(n):
-    if n == 0:
-        1
+fun my-zeros(n):
+    if n > 0:
+        link(0, my-zeros(n - 1))
     else:
-        if n == 1:
-            1
-        else:
-            my-fibo(n - 1) + my-fibo(n - 2)
-        end
+        empty
     end
 where:
-    my-fibo(0) is 1
-    my-fibo(1) is 1
-    my-fibo(2) is 2
-    my-fibo(3) is 3
-    my-fibo(4) is 5
-    my-fibo(5) is 8
-    my-fibo(6) is 13
+    my-zeros(0) is [list:]
+    my-zeros(1) is [list: 0]
+    my-zeros(2) is [list:0, 0]
+    my-zeros(3) is [list: 0, 0, 0]
 end
