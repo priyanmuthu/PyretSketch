@@ -538,6 +538,11 @@ public class SCP extends FEReplacer
 			for (Expression p : params) {
 				// Do nothing
 				String pStr = p.toString();
+
+				if(p instanceof ExprBinary){
+					pStr = ExprBinaryString((ExprBinary) p);
+				}
+
 				if (!pStr.startsWith("_out")) {
 					paramStrList.add(pStr);
 					continue;
