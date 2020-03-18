@@ -7,7 +7,30 @@ from translator import ptest2sk
 from utils import UtilMethods
 from synthesizer import synthesize_list_to_int, synthesize_list_to_list, synthesize_int_to_list
 
+def test_pyret():
+    py_filename = 'b6_hint_sol.arr'
+    # py_filename = os.path.abspath(py_filename)
+    cur_dir = os.path.dirname(os.path.realpath(__file__))
+    out_dir = os.path.abspath('./out')
+    print(py_filename)
+    os.chdir(out_dir)
+
+    command = ['pyret', py_filename]
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = process.communicate()
+    process.wait()
+    if process.returncode != 0:
+        print('error occured running the code')
+        print(err.decode())
+    print(process.returncode)
+    print(out.decode())
+    return
+
 def run(filename: str):
+    synthesize_pyret(filename)
+    # test_pyret()
+
+def synthesize_pyret(filename: str):
     
     filename = os.path.abspath(filename)
 
@@ -43,7 +66,7 @@ def run(filename: str):
         os.makedirs('out')
     solution_file = './out/' + os.path.basename(filename).split('.', 1)[0] + '_sol.arr'
 
-    print(solution_file)
+    print('solution stored in: ', solution_file)
     result_str = process_result(result_str)
     if result_str:
         UtilMethods.write_text_to_file(solution_file, result_str)

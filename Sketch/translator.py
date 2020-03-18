@@ -4,6 +4,7 @@ import subprocess
 import os
 from string import Template
 import tempfile
+from utils import UtilMethods
 
 whitespaces = [' ', '\t', '\n']
 symbols = ['+', '*', '/', '[', ']', '(', ')', ',', ':']
@@ -242,7 +243,11 @@ def ptest2sk(filename, funcname = ''):
     transresult, funcSignature = translate(lexresult)
     translated_code = sktokens2skcode(transresult)
     return translated_code, funcSignature
-    
+
+def get_test_cases(filename):
+    temp_file_name = preprocess(filename)
+    return UtilMethods.text_from_file(temp_file_name)
+
 def getFuncSignature(filename, funcname = ''):
     # Just packing of calling preprocessing, tokenizing and translating
     # Because Sketch doesn't support function names containing '-'
@@ -250,8 +255,8 @@ def getFuncSignature(filename, funcname = ''):
     # currently the Pyret function name is automatically inferred, so the param 'funcname' is not used. 
     # returns a list of Sketch tokens
     # as well as Pyret function signature containing name, return type and param type
-    preprocess(filename)
-    lexresult = tokenize(filename.split('.', 1)[0] + '.tmp')
+    temp_file_name = preprocess(filename)
+    lexresult = tokenize(temp_file_name)
     # print(lexresult)
     transresult, funcSignature = translate(lexresult)
     return funcSignature
