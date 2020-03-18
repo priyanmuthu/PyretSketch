@@ -9,7 +9,7 @@ fun my-max(l):
   end
 where:
     my-max([list: 1,2,3,4]) is 4
-    my-max([list: 4,3,2,1]) is 4
-    my-max([list: 5,2,7,5,9]) is 9
+    my-max([list: 7,3,2,1]) is 7
+    my-max([list: 2,7,9,5]) is 9
     my-max([list: ]) is 0
 end
